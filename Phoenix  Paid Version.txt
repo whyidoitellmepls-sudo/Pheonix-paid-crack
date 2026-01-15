@@ -58,7 +58,7 @@ local function startInstantRebirthAdvanced()
             end
             
 
-            player:Kick("🎉 Successfully rebirthed! Total: " .. currentRebirths .. " Плак плак 🤣😂")
+            player:Kick("🎉 Successfully rebirthed! Total: " .. currentRebirths .. " Happy New Year")
         else
             player:Kick("⚠️ Rebirth error: " .. tostring(response))
         end
