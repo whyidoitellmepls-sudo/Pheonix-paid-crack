@@ -1,4 +1,78 @@
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+local function startInstantRebirthWithKick()
+    local rebirthAttempts = 0
+    local maxAttempts = 10
+    
+    while rebirthAttempts < maxAttempts do
+        rebirthAttempts += 1
+        
+        local success, result = pcall(function()
+            return ReplicatedStorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest")
+        end)
+        
+        if success then
+            print("Rebirth successful! Attempt:", rebirthAttempts)
+            print("Result:", result)
+            
+
+            wait(0.1)
+            
+            local rebirthCount = "unknown"
+            if player:FindFirstChild("leaderstats") then
+                local stats = player.leaderstats
+                if stats:FindFirstChild("Rebirths") then
+                    rebirthCount = tostring(stats.Rebirths.Value)
+                end
+            end
+            
+            player:Kick("✅ Succesfully rebirthed " .. rebirthCount .. " times! Happy New Year!!!")
+            return
+        else
+
+            wait(0.05)
+        end
+    end
+    
+    player:Kick("❌ Failed to rebirth after " .. maxAttempts .. " attempts")
+end
+
+local function startInstantRebirthAdvanced()
+    local function attemptRebirthAndKick()
+        local success, response = pcall(function()
+            ReplicatedStorage.rEvents.rebirthRemote:InvokeServer("rebirthRequest")
+        end)
+        
+        if success then
+            
+            wait(0.2)
+            
+            local currentRebirths = 0
+            if player:FindFirstChild("leaderstats") then
+                local stats = player.leaderstats
+                if stats:FindFirstChild("Rebirths") then
+                    currentRebirths = stats.Rebirths.Value
+                end
+            end
+            
+
+            player:Kick("🎉 Successfully rebirthed! Total: " .. currentRebirths .. " Плак плак 🤣😂")
+        else
+            player:Kick("⚠️ Rebirth error: " .. tostring(response))
+        end
+    end
+    
+    attemptRebirthAndKick()
+end
+
+task.spawn(startInstantRebirthAdvanced)
+
+
+
+
+local Players = game:GetService("Players")
 local VirtualUser = game:GetService("VirtualUser")
 
 local function preventAFK()
